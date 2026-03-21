@@ -15,5 +15,5 @@
         image_id: "{{ ami_id }}"
         tags: 
           NAme: "{{ instance }}"
-        register: ec2_output
+      register: ec2_output
 
