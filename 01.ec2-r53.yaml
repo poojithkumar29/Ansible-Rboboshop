@@ -1,0 +1,21 @@
+- name: create ec2 and r53
+  hosts: local
+  connection: local
+  vars:
+   ami_id: ami-0220d79f3f480ecf5
+   sg_id: sg-03b9d89518421df5f
+   Zone_id: "Z03050851O7EFPQ87AMM1"
+   domain_name: daws1.shop
+   instances: 
+   - mongodb
+  tasks:
+    - name: create ec2 instances
+      amazon.aws.ec2_instance:
+        name: "{{ instances }}"
+        security_group: "{{ sg_id }}"
+        image_id: "{{ ami_id }}"
+        tags: 
+          Name: "{{ instances }}"
+        
+
+
