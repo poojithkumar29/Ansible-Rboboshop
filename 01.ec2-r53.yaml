@@ -8,6 +8,8 @@
     domain_name: daws1.shop
     instances:
     - mongodb
+    - mysql
+    - redis
 
   tasks:
     - name: create ec2 instance
@@ -22,17 +24,27 @@
       loop: "{{ instances }}"
       register: ec2_output
 
-    - name: print the ec2_output
-      ansible.builtin.debug: 
-        msg: "{{ ec2_output }}"
+    # - name: print the ec2_output
+    #   ansible.builtin.debug: 
+    #     msg: "{{ ec2_output }}"
 
-    - name: Get the public ip_address
-      ansible.builtin.debug:
-        msg: "{{ item.instances[0].public_ip_address }}"
-      loop: "{{ ec2_output.results }}"
+    # - name: Get the public ip_address
+    #   ansible.builtin.debug:
+    #     msg: "{{ item.instances[0].public_ip_address }}"
+    #   loop: "{{ ec2_output.results }}"
       
-    - name: Get the private_ip_address
-      ansible.builtin.debug:
-        msg: "{{ item.instances[0].private_ip_address }}"
+    # - name: Get the private_ip_address
+    #   ansible.builtin.debug:
+    #     msg: "{{ item.instances[0].private_ip_address }}"
+    #   loop: "{{ ec2_output.results }}"
+    
+    - name: create route53
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "{{ item.item }}.{{ domain_name }}"
+        type: A
+        ttl: 1
       loop: "{{ ec2_output.results }}"
-
+    
+   
