@@ -28,11 +28,11 @@
 
     - name: Get the public ip_address
       ansible.builtin.debug:
-        msg: "{{ item.instancs[0].public_ip_address }}"
+        msg: "{{ item.instances[0].public_ip_address }}"
       loop: "{{ ec2_output.results }}"
       
     - name: Get the private_ip_address
       ansible.builtin.debug:
-        msg: "{{ item.instancs[0].private_ip_address }}"
+        msg: "{{ item.instances[0].private_ip_address }}"
       loop: "{{ ec2_output.results }}"
 
