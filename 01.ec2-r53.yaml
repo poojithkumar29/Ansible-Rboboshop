@@ -2,25 +2,23 @@
   hosts: local
   connection: local
   vars:
-   ami_id: ami-0220d79f3f480ecf5
-   sg_id: sg-03b9d89518421df5f
-   Zone_id: "Z03050851O7EFPQ87AMM1"
-   domain_name: daws1.shop
-   instance:
-   - mongodb
+    ami_id: ami-0220d79f3f480ecf5
+    sg_id: sg-03b9d89518421df5f
+    zone_id: Z03050851O7EFPQ87AMM1
+    domain_name: daws1.shop
+    instances:
+      - mongodb
+
   tasks:
     - name: create ec2 instance
       amazon.aws.ec2_instance:
-        name: " {{ instance }}"
+        name: "{{ item }}"
         instance_type: t3.micro
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
-        tags: 
-          NAme: "{{ instance }}"
-      loop: "{{ instance }}"
+        wait: yes
+        tags:
+          Name: "{{ item }}"
+      loop: "{{ instances }}"
       register: ec2_output
-
-    - name: print the ec2_output
-      ansible.builtin.debug:
-        msg: " {{ ec2_output }} "
 
