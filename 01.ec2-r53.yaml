@@ -6,6 +6,8 @@
    sg_id: sg-03b9d89518421df5f
    Zone_id: "Z03050851O7EFPQ87AMM1"
    domain_name: daws1.shop
+   instance:
+   - mongodb
   tasks:
     - name: create ec2 instance
       amazon.aws.ec2_instance:
