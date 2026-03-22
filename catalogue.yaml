@@ -39,13 +39,26 @@
 
     - name: Install dependencies
       community.general.npm:
-      name: npm
-      path: /app
+       name: npm
+       path: /app
 
     - name: copy the service file
       ansible.builtin.copy:
         src: catalogue.service
         dest: /etc/systemd/system/catalogue.service
+      
+    - name: copy mogodb repo
+      ansible.builtin.copy:
+        src: mongodb.repo
+        dest: /etc/yum.repos.d/mongo.repo
+
+    - name: install mongodb
+      ansible.builtin.package:
+        name: mongodb-mongosh
+        state: present
+
+    
+
 
 
 
