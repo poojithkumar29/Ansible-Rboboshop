@@ -15,7 +15,7 @@
     - name: enable and  start service
       ansible.builtin.service:
         name: rabbitmq
-        sate: started
+        state: started
         enabled: yes
 
     - name: add user and permissions 
