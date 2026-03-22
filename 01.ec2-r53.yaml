@@ -8,10 +8,7 @@
     domain_name: daws1.shop
     instances:
     - mongodb
-    - mysql
     - redis
-    
-    - rabbitmq
 
   tasks:
     - name: create ec2 instance
