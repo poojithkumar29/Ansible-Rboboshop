@@ -11,7 +11,7 @@
       ansible.builtin.package:
         name: mongodb-org
         state: present
-        
+
     - name: replcae the address
       ansible.builtin.replace:
         path: /etc/mongod.conf
@@ -21,7 +21,7 @@
     - name: Start and Enable the services
       ansible.builtin.service:
         name: mongod
-        state: Started
+        state: started
         enabled: yes
 
   
