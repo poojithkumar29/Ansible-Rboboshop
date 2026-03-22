@@ -38,7 +38,7 @@
 
 
     - name: Download application code
-      ansible.builtin.url:
+      ansible.builtin.get_urlurl:
         url: https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip
         dest: /tmp/cart.zip
 
