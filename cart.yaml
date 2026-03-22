@@ -29,7 +29,7 @@
     - name: create directory
       ansible.builtin.file:
         path: /app
-        state: present
+        state: directory
 
     - name: remove application code
       ansible.builtin.file:
