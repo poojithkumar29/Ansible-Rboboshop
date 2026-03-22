@@ -10,7 +10,7 @@
     - mongodb
     - mysql
     - redis
-    - forntend
+    
     - rabbitmq
 
   tasks:
@@ -53,10 +53,10 @@
     
     - name: create route53 record for forntend
       amazon.aws.route53:
-        sate: present
+        state: present
         zone: "{{ domain_name }}"
         record: "{{ item.item }}.{{ domain_name }}"
-        value: " {{ item.instances[0].public_ip_address}}"
+        value: " {{ item.instances[0].public_ip_address }}"
         type: A
         ttl: 1
         overwrite: true
