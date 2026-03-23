@@ -8,10 +8,21 @@
     - name: Enable NGINX
       ansible.builtin.command: dnf module enable nginx:1.24 -y
 
+    - name: install nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+
     - name: Delete default fike
       ansible.builtin.file:
         state: absent
         path:  /usr/share/nginx/html/*
+
+    - name:  create html directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/
+        state: directory
 
     - name: Download the frontend content
       ansible.builtin.get_url:
