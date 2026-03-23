@@ -13,7 +13,7 @@
     - name: install python libaraies
       ansible.builtin.pip:
         executable: pip3.9
-        name: "{{ ietm }}"
+        name: "{{ item }}"
       loop:
       - cryptography
       - PyMySQL
