@@ -1,96 +1,103 @@
-- name: congiure Shipping server
+- name: configure shipping server
   hosts: shipping
   become: yes
   tasks:
-    - name: Install maven
-      ansible.builtin.package:
-        name: "{{ item }}"
-        state: present
-      loop: 
-      - maven
-      - mysql
 
-    - name: install python libaraies
-      ansible.builtin.pip:
-        executable: pip3.9
-        name: "{{ item }}"
-      loop:
-      - cryptography
-      - PyMySQL
+  - name: install required packages
+    ansible.builtin.dnf:
+      name:
+        - maven
+        - mysql
+      state: present
 
+  - name: install mysql python libraries
+    ansible.builtin.pip:
+      executable: pip3
+      name:
+        - cryptography
+        - PyMySQL
 
-    - name: Add application User
-      ansible.builtin.user:
-        name: roboshop
-        comment: roboshop system user
-        shell:  /sbin/nologin
-        system: yes
-        home: /app
-    
+  - name: create roboshop system user
+    ansible.builtin.user:
+      name: roboshop
+      comment: RoboShop System user
+      system: true
+      shell: /sbin/nologin
+      home: /app
 
-    - name: Remove directory
-      ansible.builtin.file:
-        path: /app
-        state: absent
+  - name: remove app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
 
-    - name: create directory
-      ansible.builtin.file:
-        path: /app
-        state: directory
+  - name: create app directory
+    ansible.builtin.file:
+      path: /app
+      state: directory
+      owner: roboshop
+      group: roboshop
 
-    - name: remove file
-      ansible.builtin.file:
-        path: /tmp/shipping.zip
-        state: absent
+  - name: delete shipping zip
+    ansible.builtin.file:
+      path: /tmp/shipping.zip
+      state: absent
 
-    - name: Download the application code
-      ansible.builtin.get_url:
-        url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
-        dest: /tmp/shipping.zip
+  - name: download shipping application
+    ansible.builtin.get_url:
+      url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip
+      dest: /tmp/shipping.zip
 
-    - name: unzip the file
-      ansible.builtin.unarchive:
-        src: /tmp/shipping.zip
-        dest: /app
-        remote_src: yes
+  - name: extract shipping application
+    ansible.builtin.unarchive:
+      src: /tmp/shipping.zip
+      dest: /app
+      remote_src: yes
 
-    - name: Install dependencies
-      ansible.builtin.command: mvn clean package
-      args: 
-        chdir: /app
+  - name: build shipping application
+    ansible.builtin.command: mvn clean package
+    args:
+      chdir: /app
 
-    - name: copy service file
-      ansible.builtin.copy:
-        src: shipping.service
-        dest: /etc/systemd/system/shipping.service
+  - name: move jar file
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    args:
+      chdir: /app
 
-    - name: Load data intlo mysql
-      community.mysql.mysql_db:
-        state: import
-        name: all
-        login_host: mysql.daws1.shop
-        login_user: root
-        login_password: RoboShop@1
-        target: "{{ item }}"
-      loop:
-      - /app/db/schema.sql
-      - /app/db/app-user.sql
-      - /app/db/master-data.sql
-    
-    - name: daemon reload enable and start
-      ansible.builtin.systemd_service:
-        name: shipping
-        enabled: true
-        state: started
-        
-        daemon_reload: true
-      
+  - name: copy shipping service
+    ansible.builtin.copy:
+      src: shipping.service
+      dest: /etc/systemd/system/shipping.service
 
+  - name: load schema
+    community.mysql.mysql_db:
+      state: import
+      name: shipping
+      login_host: mysql.daws86s.fun
+      login_user: root
+      login_password: RoboShop@1
+      target: /app/db/schema.sql
 
+  - name: load app user
+    community.mysql.mysql_db:
+      state: import
+      name: shipping
+      login_host: mysql.daws1.shop
+      login_user: root
+      login_password: RoboShop@1
+      target: /app/db/app-user.sql
 
-    
+  - name: load master data
+    community.mysql.mysql_db:
+      state: import
+      name: shipping
+      login_host: mysql.daws1.shop
+      login_user: root
+      login_password: RoboShop@1
+      target: /app/db/master-data.sql
 
-    
-
-
-
+  - name: reload and start shipping
+    ansible.builtin.systemd_service:
+      name: shipping
+      enabled: true
+      state: restarted
+      daemon_reload: true
