@@ -69,6 +69,7 @@
   - name: import shipping SQL files
     community.mysql.mysql_db:
       state: import
+      name: cities
       login_host: mysql.daws1.shop
       login_user: root
       login_password: RoboShop@1
