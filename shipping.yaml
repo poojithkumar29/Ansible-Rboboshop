@@ -32,7 +32,7 @@
     - name: remove file
       ansible.builtin.file:
         path: /tmp/shipping.zip
-        sate: absent
+        state: absent
 
     - name: Download the application code
       ansible.builtin.get_url:
