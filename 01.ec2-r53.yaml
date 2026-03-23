@@ -63,7 +63,7 @@
         type: A
         ttl: 1
         overwrite: true
-      when: item.item == 'forntend'
+      when: item.item == 'frontend'
       loop: "{{ ec2_output.results }}"
 
 
