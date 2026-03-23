@@ -1,5 +1,5 @@
-- name: setup User server
-  hosts: user
+- name: setup cart server
+  hosts: cart
   become: yes
   tasks:
     - name: Disable nodejs
