@@ -72,7 +72,7 @@
     community.mysql.mysql_db:
       state: import
       name: shipping
-      login_host: mysql.daws86s.fun
+      login_host: mysql.daws1.shop
       login_user: root
       login_password: RoboShop@1
       target: /app/db/schema.sql
