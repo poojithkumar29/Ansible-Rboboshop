@@ -59,7 +59,19 @@
         state: present
         zone: "{{ domain_name }}"
         record: "{{ item.item }}.{{ domain_name }}"
-        value: " {{ item.instances[0].public_ip_address }}"
+        value: "{{ item.instances[0].public_ip_address }}"
+        type: A
+        ttl: 1
+        overwrite: true
+      when: item.item == 'frontend'
+      loop: "{{ ec2_output.results }}"
+
+    - name: create root domain record
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "{{ domain_name }}"
+        value: "{{ item.instances[0].public_ip_address }}"
         type: A
         ttl: 1
         overwrite: true
