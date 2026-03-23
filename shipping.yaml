@@ -3,7 +3,7 @@
   become: yes
   tasks:
     - name: Install maven
-      ansible.builtin.dnf:
+      ansible.builtin.package:
         name: "{{ item }}"
         sate: present
       loop: 
