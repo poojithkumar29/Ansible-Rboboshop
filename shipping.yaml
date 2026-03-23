@@ -11,11 +11,12 @@
       - mysql
 
     - name: Add application User
-      name: roboshop
-      comment:  "roboshop system user"
-      shell:  /sbin/nologin
-      system: yes
-      home: /app
+      ansible.builtin.user:
+        name: roboshop
+        comment: roboshop system user
+        shell:  /sbin/nologin
+        system: yes
+        home: /app
     
 
     - name: Remove directory
