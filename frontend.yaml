@@ -1,5 +1,5 @@
 - name: setup fronetnd server
-  hosts: forntend
+  hosts: frontend
   become: yes
   tasks:
     - name: Disable NGINX
