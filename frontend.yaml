@@ -21,7 +21,7 @@
     - name:  Extract the frontend content.
       ansible.builtin.unarchive:
         src: /tmp/frontend.zip
-        dest: /usr/share/nginx/html
+        dest: /usr/share/nginx/html/
         remote_src: yes
 
     - name: delete default nginx conf
